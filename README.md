@@ -9,8 +9,10 @@ Agradecimento ao Leonardo Pereira e a Iulisloi Zacarias.
   
   NodeMcu Lua ESP8266 ESP-12F
   https://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12F-WIFI-Development-Board-p-985891.html
+  
   Sensor de Fluxo:
   https://www.banggood.com/G34-Inch-Liquid-Water-Flow-Sensor-Switch-Copper-Hall-Effect-Flowmeter-Meter-p-1188160.html
+  
   Sensor Ultrassônico
   https://www.banggood.com/Wholesale-Geekcreit-Ultrasonic-Module-HC-SR04-Distance-Measuring-Ranging-Transducer-Sensor-DC-5V-2-450cm-p-40313.html
 
