@@ -32,6 +32,17 @@ Agradecimento ao <b>Leonardo Pereira</b> e a <a href="https://github.com/izacari
   OBS: Alimentar ambos sensores com 5V //VIN
 <p><img width="250" src="https://raw.githubusercontent.com/remontti/SensorAgua/master/esquema.png">
 
+<b>É importante que você altere as principais configurações no código!</b>
+<pre>
+#define MQTT_USERNAME "usuario"
+#define MQTT_PASSWORD "senha"
+
+const String HOSTNAME = "SensorAgua";       // Nome do Host e tambem do AP para fazer a configuração inicial.
+const char *OTA_PASSWORD = "";              // Senha para conectar no AP (Atualizar o Firmware Over the Air)
+const char *MQTT_SERVER = "192.168.87.5";   // IP ou DNS do Broker MQTT (IP DO HA)
+</pre>
+Ajuste a contagem dos pusolsos para saber a sua vazão corretamente.  <b>vazao = contaPulso / 6.6; </b> para sua realidade, no <a href="https://www.openhacks.com/page/productos/id/3080/title/Flow-Sensor-3-4-Inch-Brass-YF-B5#.XYuXuOZKicm">meu caso o sensor é 3/4</a> onde frequencia:  F=6.6*Q(Q=L/MIN) 
+
 
 <b>CONECTANDO WIFI</b><br>
 Ao enviar pela primeira vez seu ESP vai ficar em modo AP, com seu celular conecte no nome de sinal abra o 192.168.4.1 e defina o nome e senha de sua rede wifi.
