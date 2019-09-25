@@ -8,63 +8,17 @@
 
   OBS:
   - Alimentar ambos sensores com 5V //VIN
-  
-  NodeMcu Lua ESP8266 ESP-12F
-  https://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12F-WIFI-Development-Board-p-985891.html
-  Sensor de Fluxo:
-  https://www.banggood.com/G34-Inch-Liquid-Water-Flow-Sensor-Switch-Copper-Hall-Effect-Flowmeter-Meter-p-1188160.html
-  Sensor Ultrassônico
-  https://www.banggood.com/Wholesale-Geekcreit-Ultrasonic-Module-HC-SR04-Distance-Measuring-Ranging-Transducer-Sensor-DC-5V-2-450cm-p-40313.html
-
 
   Ligação Sensor de Fluxo:
   Fio Vermelho --> Pino VIN 5V
   Fio Preto    --> Pino GND (Qualquer um)
-  Fio Amarelo  --> Pino D3 (GPIO0)
+  Fio Amarelo  --> Pino D7  (GPIO13)
 
   Ligação Sensor HC-SR04:
   Vcc  -->  Pino VIN 5V
   Trig -->  Pino D6 (GPIO12)
   Echo -->  Pino D5 (GPIO14)
   Gnd  -->  Pino Gnd (Qualquer um)
-
-  Ao enviar pela primeira vez seu ESP vai ficar em modo AP, com seu celular conecte no nome de sinal abra o 192.168.4.1 e defina o nome e senha de sua rede wifi
-
-Configuração no Home Assistant
-sensor:
-  - platform: mqtt
-    state_topic: 'SensorAgua/contagem'
-    name: 'Vazão de Água'
-    icon: mdi:water
-    unit_of_measurement: 'litros/s'
-    value_template: '{{ value_json.vazao }}'
-  - platform: mqtt
-    state_topic: 'SensorAgua/contagem'
-    name: 'Consumo de Água'
-    icon: mdi:water-percent
-    unit_of_measurement: 'litros'
-    value_template: '{{ value_json.consumo_agua }}'
-  - platform: mqtt
-    state_topic: 'SensorAgua/contagem'
-    name: "Distancia D'agua"
-    icon: mdi:ruler
-    unit_of_measurement: 'cm'
-    value_template: '{{ value_json.distancia }}'
-
-utility_meter:
-  consumo_de_agua_dia:
-    source: sensor.consumo_de_agua
-    cycle: daily
-  consumo_de_agua_semana:
-    source: sensor.consumo_de_agua
-    cycle: weekly
-  consumo_de_agua_mes:
-    source: sensor.consumo_de_agua
-    cycle: monthly
-  consumo_de_agua_ano:
-    source: sensor.consumo_de_agua
-    cycle: yearly
-
 */
 
 /* Including files */
@@ -79,8 +33,8 @@ utility_meter:
 
 /* Configuração do acesso ao Broker MQTT */
 #define MQTT_AUTH true
-#define MQTT_USERNAME "USUARIO"   //USUARIO 
-#define MQTT_PASSWORD "SENHA"     //SENHA 
+#define MQTT_USERNAME "usuario"    // Usuario do seu MQTT
+#define MQTT_PASSWORD "senha"      // Senha para conectar ao MQTT
 
 /* Constantes */
 const String HOSTNAME = "SensorAgua";                 // Nome do Host. Este nome tambem será o nome do AP para fazer a configuração inicial.
@@ -88,12 +42,12 @@ const char *OTA_PASSWORD = "";                        // Senha para conectar no 
 const char *MQTT_LOG = "system/log";                  // Topico onde o Device Publica informações relacionadas com o sistema
 const char *MQTT_SYSTEM_CONTROL_TOPIC = "system/set"; // Topico onde o Device subscreve para aceitar instruções de sistema
 const char *MQTT_TEST_TOPIC = "superTopic";           // Topico de exemplo onde o Device subscreve (por exemplo controlar uma lâmpada)
-const char *MQTT_SERVER = "192.168.87.5";             // IP ou DNS do Broker MQTT - IP DO HA
+const char *MQTT_SERVER = "192.168.87.5";             // IP ou DNS do Broker MQTT
 
 /* Configurando GPIO */
-const int ULTRASSOM_TRIGGER = 12; // D6  --> GPIO12 (HC-SR04)
-const int ULTRASSOM_ECHO    = 14; // D5  --> GPIO14 (HC-SR04)
-const int pulsoPin = 2;           // D3  --> GPIO0  Sensor de Fluxo d'agua
+const int trigPin  = 12;   // D6  --> GPIO12 (HC-SR04)
+const int echoPin  = 14;   // D5  --> GPIO14 (HC-SR04)
+const int pulsoPin = 13;   // D7  --> GPIO13   Sensor de Fluxo d'agua
 
 /* Cliente MQTT */
 WiFiClient wclient;
@@ -120,7 +74,7 @@ void setup() {
       2 - fazer Upload do código para o ESP
       3 - voltar a comentar a linha e enviar novamente o código para o ESP
   */
-  // wifiManager.resetSettings();
+  //wifiManager.resetSettings();
 
   /*define o tempo limite até o portal de configuração ficar novamente inátivo, útil para quando alteramos a password do AP*/
   wifiManager.setTimeout(180);
@@ -128,13 +82,13 @@ void setup() {
   client.setCallback(callback); //Registo da função que vai responder ás mensagens vindos do MQTT
 
   //Setup Ultrasonico
-  pinMode(ULTRASSOM_TRIGGER, OUTPUT); // Define o trigPin como uma saída
-  pinMode(ULTRASSOM_ECHO, INPUT);  // Define o echoPin como uma entrada
+  pinMode(trigPin, OUTPUT); // Define o trigPin como uma saída
+  pinMode(echoPin, INPUT);  // Define o echoPin como uma entrada
 
   //Setup Fluxo d'agua
   pinMode(pulsoPin, INPUT);
-  attachInterrupt(0, incpulso, RISING); //Configura o pino 2(Interrupção 0) para trabalhar como interrupção
-  Serial.println("\n\nInicio\n\n");     //Imprime Inicio na serial
+  attachInterrupt(pulsoPin, incpulso, RISING); //Configura o pino *pulsoPin* para trabalhar como interrupção
+  Serial.println("\n\nInicio\n\n");            //Imprime Inicio na serial
 
   // Piscar LED do ESP
   pinMode(LED_BUILTIN, OUTPUT);
@@ -277,7 +231,7 @@ void loop() {
       }
 
       /* Lê distancia */
-      dados.distancia = le_distancia(ULTRASSOM_TRIGGER, ULTRASSOM_ECHO);
+      dados.distancia = le_distancia(trigPin, echoPin);
       // Prints the distance on the Serial Monitor
       Serial.print("Distance: ");
       Serial.println(dados.distancia);
@@ -285,13 +239,13 @@ void loop() {
       // **************************************
       //    Inicio Agua
       // **************************************
-      contaPulso = 0; //Zera a variável para contar os giros por segundos
-      sei();          //Habilita interrupção
-      digitalWrite(LED_BUILTIN, HIGH);   // Liga o LED
-      delay(900);     //Aguarda 1 segundo
-      digitalWrite(LED_BUILTIN, LOW);    // Desliga o LED
-      delay(100);     //Aguarda 1 segundo
-      cli();          //Desabilita interrupção
+      contaPulso = 0;                  //Zera a variável para contar os giros por segundos
+      sei();                           //Habilita interrupção
+      digitalWrite(LED_BUILTIN, HIGH); //Liga o LED
+      delay(900);                      //Aguarda 900 ms
+      digitalWrite(LED_BUILTIN, LOW);  //Desliga o LED
+      delay(100);                      //Aguarda 100 ms
+      cli();                           //Desabilita interrupção
 
       vazao = contaPulso / 6.6; //Converte para L/min
       media = media + vazao;    //Soma a vazão para o calculo da media
