@@ -1,19 +1,19 @@
 # SensorAgua
 
-Agradecimento ao Leonardo Pereira e a <a href="https://github.com/izacarias">Iulisloi Zacarias</a>.
-
-  MQTT - como instalar -> https://www.youtube.com/watch?v=GMMH6qT8_f4
-  ESP - como instalar -> https://www.youtube.com/watch?v=4d8joORYTIA&t=1s
-  Wi-Fi Manager  como instalar -> https://www.youtube.com/watch?v=wWO9n5DnuLA
-  OTA -> já está incluida no IDE do Arudino
+Agradecimento ao <b>Leonardo Pereira</b> e a <a href="https://github.com/izacarias"><b>Iulisloi Zacarias</b></a>.<br><br>
+  <b>Bibliotecas</b><br>
+  MQTT - como instalar -> https://www.youtube.com/watch?v=GMMH6qT8_f4<br>
+  ESP - como instalar -> https://www.youtube.com/watch?v=4d8joORYTIA&t=1s<br>
+  Wi-Fi Manager  como instalar -> https://www.youtube.com/watch?v=wWO9n5DnuLA<br>
+  OTA -> já está incluida no IDE do Arudino<br>
   
-  NodeMcu Lua ESP8266 ESP-12F
+  NodeMcu Lua ESP8266 ESP-12F<br>
   https://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12F-WIFI-Development-Board-p-985891.html
   
-  Sensor de Fluxo:
+  Sensor de Fluxo:<br>
   https://www.banggood.com/G34-Inch-Liquid-Water-Flow-Sensor-Switch-Copper-Hall-Effect-Flowmeter-Meter-p-1188160.html
   
-  Sensor Ultrassônico
+  Sensor Ultrassônico<br>
   https://www.banggood.com/Wholesale-Geekcreit-Ultrasonic-Module-HC-SR04-Distance-Measuring-Ranging-Transducer-Sensor-DC-5V-2-450cm-p-40313.html
 
 
