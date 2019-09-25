@@ -1,6 +1,6 @@
 # SensorAgua
 
-Agradecimento ao Leonardo Pereira e a Iulisloi Zacarias.
+Agradecimento ao Leonardo Pereira e a <a href="https://github.com/izacarias">Iulisloi Zacarias</a>.
 
   MQTT - como instalar -> https://www.youtube.com/watch?v=GMMH6qT8_f4
   ESP - como instalar -> https://www.youtube.com/watch?v=4d8joORYTIA&t=1s
