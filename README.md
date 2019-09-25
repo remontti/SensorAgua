@@ -1,4 +1,4 @@
-# SensorAgua
+# Sensor para mediar o nível da caixa D'Agua e O fluxo de água de um "cano"
 
 Agradecimento ao <b>Leonardo Pereira</b> e a <a href="https://github.com/izacarias"><b>Iulisloi Zacarias</b></a>.<br><br>
   <b>Bibliotecas</b><br>
