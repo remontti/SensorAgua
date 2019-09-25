@@ -80,3 +80,72 @@ utility_meter:
     cycle: yearly
     </pre>
 <img src="https://raw.githubusercontent.com/remontti/SensorAgua/master/agua.png">
+<b>CARDs:</b><br>
+
+<pre>
+  entities:
+  - entity: sensor.vazao_de_agua
+  - type: section
+  - entity: sensor.consumo_de_agua
+    name: Consumo de água no último minuto
+  - type: section
+  - entity: sensor.consumo_de_agua_dia
+    name: Hoje
+  - entity: sensor.consumo_de_agua_semana
+    name: Semana
+  - entity: sensor.consumo_de_agua_mes
+    name: Mes
+  - entity: sensor.consumo_de_agua_ano
+    name: Ano
+type: entities
+title: Consumo de Água
+show_header_toggle: false
+</pre>
+<pre>
+cards:
+  - entities:
+      - label: Sensor Ultrasonico
+        type: section
+      - entity: sensor.distancia_d_agua
+      - label: Descona a distância da tampa até a água
+        type: section
+      - entity: sensor.nivel_real
+    type: entities
+  - cards:
+      - entity: sensor.caixa_dagua_litros
+        max: 2000
+        min: 0
+        severity:
+          green: 1500
+          red: 500
+          yellow: 1000
+        type: gauge
+      - entity: sensor.caixa_dagua
+        max: 100
+        min: 0
+        severity:
+          green: 90
+          red: 20
+          yellow: 50
+        type: gauge
+    type: horizontal-stack
+  - cards:
+      - entities:
+          - color: '#18FFFF'
+            entity: sensor.consumo_de_agua
+            show_state: true
+          - color: '#CDDC39'
+            entity: sensor.vazao_de_agua
+            show_state: true
+        font_size: 90
+        hours_to_show: 1
+        line_width: 2
+        name: Consumo de água na última hora
+        points_per_hour: 30
+        show:
+          extrema: true
+          fill: true
+        type: 'custom:mini-graph-card'
+    type: horizontal-stack
+type: vertical-stack
+</pre>
