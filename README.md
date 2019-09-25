@@ -18,9 +18,10 @@ Agradecimento ao <b>Leonardo Pereira</b> e a <a href="https://github.com/izacari
 
 
   <b>Ligação Sensor de Fluxo:</b>
-  <pre>Fio Vermelho --> Pino VIN 5V
+  <pre>
+  Fio Vermelho --> Pino VIN 5V
   Fio Preto    --> Pino GND (Qualquer um)
-  Fio Amarelo  --> Pino D3 (GPIO0)</pre>
+  Fio Amarelo  --> Pino D7 (GPIO13)</pre>
 
   <b>Ligação Sensor HC-SR04:</b>
   <pre>Vcc  -->  Pino VIN 5V
@@ -29,7 +30,8 @@ Agradecimento ao <b>Leonardo Pereira</b> e a <a href="https://github.com/izacari
   Gnd  -->  Pino Gnd (Qualquer um)</pre>
 
   OBS: Alimentar ambos sensores com 5V //VIN
-  
+<p><img width="250" src="https://raw.githubusercontent.com/remontti/SensorAgua/master/esquema.png">
+
 
 <b>CONECTANDO WIFI</b><br>
 Ao enviar pela primeira vez seu ESP vai ficar em modo AP, com seu celular conecte no nome de sinal abra o 192.168.4.1 e defina o nome e senha de sua rede wifi.
