@@ -132,7 +132,7 @@ utility_meter:
     source: sensor.consumo_de_agua
     cycle: yearly
     </pre>
-<img src="https://raw.githubusercontent.com/remontti/SensorAgua/master/agua.png">
+<img src="https://raw.githubusercontent.com/remontti/SensorAgua/master/ScreenCapture.png">
 <b>CARDs:</b><br>
 
 <pre>
