@@ -137,6 +137,7 @@ utility_meter:
 
 <pre>
 entities:
+  - entity: input_text.text_valor_agua
   - entity: sensor.vazao_de_agua_atual
   - type: section
   - entity: sensor.consumo_de_agua
@@ -164,6 +165,7 @@ entities:
 show_header_toggle: false
 title: Consumo de Água
 type: entities
+
 </pre>
 <pre>
 cards:
