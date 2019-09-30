@@ -7,15 +7,10 @@ Agradecimento ao <b>Leonardo Pereira</b> e a <a href="https://github.com/izacari
   Wi-Fi Manager  como instalar -> https://www.youtube.com/watch?v=wWO9n5DnuLA<br>
   OTA -> já está incluida no IDE do Arudino<br>
   
-  NodeMcu Lua ESP8266 ESP-12F<br>
-  https://www.banggood.com/Geekcreit-Doit-NodeMcu-Lua-ESP8266-ESP-12F-WIFI-Development-Board-p-985891.html
-  
-  Sensor de Fluxo:<br>
-  https://www.banggood.com/G34-Inch-Liquid-Water-Flow-Sensor-Switch-Copper-Hall-Effect-Flowmeter-Meter-p-1188160.html
-  
-  Sensor Ultrassônico<br>
-  https://www.banggood.com/Wholesale-Geekcreit-Ultrasonic-Module-HC-SR04-Distance-Measuring-Ranging-Transducer-Sensor-DC-5V-2-450cm-p-40313.html
-
+  <b>NodeMcu Lua ESP8266 ESP-12F</b> http://abre.ai/ajcq<br>
+  <b>Sensor Fluxo de Vazão</b> http://abre.ai/ajcr<br>
+  <b> Ultrasonic Module HC-SR04</b> http://abre.ai/ajct<br>
+  Mas recomendo comprar o aprova d'agua <b> Ultrasonic Module SN-SR04T </b> http://abre.ai/ajcv<br>
 
   <b>Ligação Sensor de Fluxo:</b>
   <pre>
