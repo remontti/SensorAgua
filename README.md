@@ -53,6 +53,11 @@ Para resetar as configurações do wifi localize a linha <b>wifiManager.resetSet
 
 Configuração no Home Assistant:
 <pre>
+input_text:
+  text_valor_agua:
+    name: "Valor litro"
+    initial: "0.007"
+
 sensor:
   - platform: mqtt
     state_topic: 'SensorAgua/contagem'
@@ -72,6 +77,46 @@ sensor:
     icon: mdi:ruler
     unit_of_measurement: 'cm'
     value_template: '{{ value_json.distancia }}'
+  - platform: template
+    sensors:
+      nivel_real:
+        friendly_name_template: "Nível Real"
+        unit_of_measurement: 'cm'
+        icon_template: 'mdi:waves'
+        value_template: "{{ ( float(states.sensor.distancia_d_agua.state) - 27 ) }}"    
+        # Minha caixa dagua tem 27cm entre a aua e altura da tampa 
+      caixa_dagua:
+        friendly_name_template: "Caixa D'agua"
+        unit_of_measurement: '%'
+        icon_template: 'mdi:waves'
+        value_template: "{{ (100 - ( float(states.sensor.nivel_real.state) * 100 / 60 )) | round(2) }}" 
+        # Cm Real * 100 / 61 Total qnd vazia
+      caixa_dagua_litros:
+        friendly_name_template: "Caixa D'agua"
+        unit_of_measurement: 'L'
+        icon_template: 'mdi:cup-water'
+        value_template: "{{  (2000 - ( float(states.sensor.nivel_real.state) * 32.787 )) | round(0) }}"
+        # se em 61 cm tem 2000 litros, logo 2000/61 = 32,7868852459
+      agua_gasta_dia:
+        friendly_name: "Água gasta hoje"
+        icon_template: mdi:cash-usd-outline
+        unit_of_measurement: 'R$'
+        value_template: "{{ ( float(states.sensor.consumo_de_agua_dia.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
+      agua_gasta_mes:
+        friendly_name: "Água gasta no mês"
+        icon_template: mdi:cash-usd-outline
+        unit_of_measurement: 'R$'
+        value_template: "{{ ( float(states.sensor.consumo_de_agua_mes.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
+      agua_gasta_semana:
+        friendly_name: "Água gasta na semana"
+        icon_template: mdi:cash-usd-outline
+        unit_of_measurement: 'R$'
+        value_template: "{{ ( float(states.sensor.consumo_de_agua_semana.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
+      agua_gasta_ano:
+        friendly_name: "Água gasta no ano"
+        icon_template: mdi:cash-usd-outline
+        unit_of_measurement: 'R$'
+        value_template: "{{ ( float(states.sensor.consumo_de_agua_ano.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
 
 utility_meter:
   consumo_de_agua_dia:
