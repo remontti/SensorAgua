@@ -136,33 +136,42 @@ utility_meter:
 <b>CARDs:</b><br>
 
 <pre>
-  entities:
-  - entity: sensor.vazao_de_agua
+entities:
+  - entity: sensor.vazao_de_agua_atual
   - type: section
   - entity: sensor.consumo_de_agua
     name: Consumo de água no último minuto
   - type: section
   - entity: sensor.consumo_de_agua_dia
     name: Hoje
+  - entity: sensor.agua_gasta_dia
+    name: Valor
+  - type: section
   - entity: sensor.consumo_de_agua_semana
     name: Semana
+  - entity: sensor.agua_gasta_semana
+    name: Valor
+  - type: section
   - entity: sensor.consumo_de_agua_mes
     name: Mes
+  - entity: sensor.agua_gasta_mes
+    name: Valor
+  - type: section
   - entity: sensor.consumo_de_agua_ano
     name: Ano
-type: entities
-title: Consumo de Água
+  - entity: sensor.agua_gasta_ano
+    name: Valor
 show_header_toggle: false
+title: Consumo de Água
+type: entities
 </pre>
 <pre>
 cards:
   - entities:
-      - label: Sensor Ultrasonico
-        type: section
       - entity: sensor.distancia_d_agua
-      - label: Descona a distância da tampa até a água
-        type: section
+        name: Sensor Ultrasonico
       - entity: sensor.nivel_real
+        icon: 'mdi:waves'
     type: entities
   - cards:
       - entity: sensor.caixa_dagua_litros
@@ -187,13 +196,11 @@ cards:
           - color: '#18FFFF'
             entity: sensor.consumo_de_agua
             show_state: true
-          - color: '#CDDC39'
-            entity: sensor.vazao_de_agua
-            show_state: true
         font_size: 90
-        hours_to_show: 1
+        hours_to_show: 6
         line_width: 2
-        name: Consumo de água na última hora
+        height: 148
+        name: Consumo de água (6h)
         points_per_hour: 30
         show:
           extrema: true
