@@ -61,76 +61,130 @@ input_text:
 sensor:
   - platform: mqtt
     state_topic: 'SensorAgua/contagem'
-    name: 'Vazão de Água'
+    name: 'Vazão de água'
     icon: mdi:water
-    unit_of_measurement: 'litros/s'
+    unit_of_measurement: 'litros'
     value_template: '{{ value_json.vazao }}'
+
   - platform: mqtt
     state_topic: 'SensorAgua/contagem'
-    name: 'Consumo de Água'
-    icon: mdi:water-percent
-    unit_of_measurement: 'litros'
+    name: 'Vazão de água (Méd/Min)'
+    icon: mdi:water-pump
+    unit_of_measurement: 'litros/min'
     value_template: '{{ value_json.consumo_agua }}'
+
   - platform: mqtt
     state_topic: 'SensorAgua/contagem'
     name: "Distancia D'agua"
     icon: mdi:ruler
     unit_of_measurement: 'cm'
     value_template: '{{ value_json.distancia }}'
+
   - platform: template
     sensors:
+      # desconta o espaco da tampa ate a agua que no meu caso é 27cm
+      nivel_real_variavel:
+        friendly_name_template: "Nível Real Var"
+        unit_of_measurement: 'cm'
+        icon_template: 'mdi:waves'
+        value_template: "{{ ( float(states.sensor.distancia_d_agua.state) - 27 ) }}" 
+
+      # Evita valor negativos
       nivel_real:
         friendly_name_template: "Nível Real"
         unit_of_measurement: 'cm'
         icon_template: 'mdi:waves'
-        value_template: "{{ ( float(states.sensor.distancia_d_agua.state) - 27 ) }}"    
-        # Minha caixa dagua tem 27cm entre a aua e altura da tampa 
+        value_template: >-
+          {% if states('sensor.nivel_real_variavel')|float < 1 %}
+            0
+          {% else %}
+            {{ states('sensor.nivel_real_variavel') }}
+          {% endif %}
+
+      # Centimetros Real * 100 / 61cm que é o total qnd vazia
       caixa_dagua:
         friendly_name_template: "Caixa D'agua"
         unit_of_measurement: '%'
         icon_template: 'mdi:waves'
         value_template: "{{ (100 - ( float(states.sensor.nivel_real.state) * 100 / 60 )) | round(2) }}" 
-        # Cm Real * 100 / 61 Total qnd vazia
+        
+      # Logo se em 61 cm tem 2000 litros, logo 2000/61 = 32,7868852459
       caixa_dagua_litros:
         friendly_name_template: "Caixa D'agua"
         unit_of_measurement: 'L'
         icon_template: 'mdi:cup-water'
         value_template: "{{  (2000 - ( float(states.sensor.nivel_real.state) * 32.787 )) | round(0) }}"
-        # se em 61 cm tem 2000 litros, logo 2000/61 = 32,7868852459
-      agua_gasta_dia:
+        
+      # Gasto com aguas
+      agua_gasta_valor_dia:
         friendly_name: "Água gasta hoje"
         icon_template: mdi:cash-usd-outline
         unit_of_measurement: 'R$'
-        value_template: "{{ ( float(states.sensor.consumo_de_agua_dia.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
-      agua_gasta_mes:
+        value_template: "{{ ( float(states.sensor.agua_gasta_dia.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
+      agua_gasta_valor_mes:
         friendly_name: "Água gasta no mês"
         icon_template: mdi:cash-usd-outline
         unit_of_measurement: 'R$'
-        value_template: "{{ ( float(states.sensor.consumo_de_agua_mes.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
-      agua_gasta_semana:
+        value_template: "{{ ( float(states.sensor.agua_gasta_mes.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
+      agua_gasta_valor_semana:
         friendly_name: "Água gasta na semana"
         icon_template: mdi:cash-usd-outline
         unit_of_measurement: 'R$'
-        value_template: "{{ ( float(states.sensor.consumo_de_agua_semana.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
-      agua_gasta_ano:
+        value_template: "{{ ( float(states.sensor.agua_gasta_semana.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
+      agua_gasta_valor_ano:
         friendly_name: "Água gasta no ano"
         icon_template: mdi:cash-usd-outline
         unit_of_measurement: 'R$'
-        value_template: "{{ ( float(states.sensor.consumo_de_agua_ano.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
+        value_template: "{{ ( float(states.sensor.agua_gasta_ano.state) * float(states.input_text.text_valor_agua.state) ) | round(2) }}"
 
 utility_meter:
-  consumo_de_agua_dia:
-    source: sensor.consumo_de_agua
+  agua_gasta_dia:
+    source: sensor.vazao_de_agua
     cycle: daily
-  consumo_de_agua_semana:
-    source: sensor.consumo_de_agua
+  agua_gasta_semana:
+    source: sensor.vazao_de_agua
     cycle: weekly
-  consumo_de_agua_mes:
-    source: sensor.consumo_de_agua
+  agua_gasta_mes:
+    source: sensor.vazao_de_agua
     cycle: monthly
-  consumo_de_agua_ano:
-    source: sensor.consumo_de_agua
+  agua_gasta_ano:
+    source: sensor.vazao_de_agua
     cycle: yearly
+
+automation:
+  #notificação quando o nível começar a baixar 
+  - alias: 'Notifica caixa dagua nível 90%'
+    trigger:
+      platform: template
+      value_template: "{{states('sensor.caixa_dagua')|float < 90 }}"
+      for:
+        minutes: 1
+    action:
+      service: notify.telegramtodos
+      data_template:
+        message: "Caixa D'agua começou a esvaziar! Nível em {{states('sensor.caixa_dagua')|int}}%, aproximadamente {{states('sensor.caixa_dagua_litros')|int}} litros. Parece que faltou água!"
+
+  - alias: 'Notifica caixa dagua nível 50%'
+    trigger:
+      platform: template
+      value_template: "{{states('sensor.caixa_dagua')|float < 50 }}"
+      for:
+        minutes: 1
+    action:
+      service: notify.telegramtodos
+      data_template:
+        message: "Nível da caixa d'agua em {{states('sensor.caixa_dagua')|int}}%, aproximadamente {{states('sensor.caixa_dagua_litros')|int}} litros"
+
+  - alias: 'Notifica caixa dagua nível 25%'
+    trigger:
+      platform: template
+      value_template: "{{states('sensor.caixa_dagua')|float < 25 }}"
+      for:
+        minutes: 1
+    action:
+      service: notify.telegramtodos
+      data_template:
+        message: "Nível da caixa d'agua em {{states('sensor.caixa_dagua')|int}}%, aproximadamente {{states('sensor.caixa_dagua_litros')|int}} litros"
     </pre>
 <img src="https://raw.githubusercontent.com/remontti/SensorAgua/master/ScreenCapture.png">
 <b>CARDs:</b><br>
@@ -138,35 +192,39 @@ utility_meter:
 <pre>
 entities:
   - entity: input_text.text_valor_agua
-  - entity: sensor.vazao_de_agua_atual
+  - entity: sensor.vazao_de_agua
+    name: Vazão de água por segundo
   - type: section
-  - entity: sensor.consumo_de_agua
-    name: Consumo de água no último minuto
-  - type: section
-  - entity: sensor.consumo_de_agua_dia
-    name: Hoje
+  - entity: sensor.vazao_de_agua_med_min
+  - label: Hoje
+    type: section
   - entity: sensor.agua_gasta_dia
+    name: Litros
+  - entity: sensor.agua_gasta_valor_dia
     name: Valor
-  - type: section
-  - entity: sensor.consumo_de_agua_semana
-    name: Semana
+  - label: Semana
+    type: section
   - entity: sensor.agua_gasta_semana
+    name: Litros
+  - entity: sensor.agua_gasta_valor_semana
     name: Valor
-  - type: section
-  - entity: sensor.consumo_de_agua_mes
-    name: Mes
+  - label: Mês
+    type: section
   - entity: sensor.agua_gasta_mes
+    name: Litros
+  - entity: sensor.agua_gasta_valor_mes
     name: Valor
-  - type: section
-  - entity: sensor.consumo_de_agua_ano
-    name: Ano
+  - label: Ano
+    type: section
   - entity: sensor.agua_gasta_ano
+    name: Litros
+  - entity: sensor.agua_gasta_valor_ano
     name: Valor
 show_header_toggle: false
 title: Consumo de Água
 type: entities
-
 </pre>
+
 <pre>
 cards:
   - entities:
@@ -199,11 +257,11 @@ cards:
             entity: sensor.consumo_de_agua
             show_state: true
         font_size: 90
+        height: 195
         hours_to_show: 6
         line_width: 2
-        height: 148
         name: Consumo de água (6h)
-        points_per_hour: 30
+        points_per_hour: 25
         show:
           extrema: true
           fill: true
