@@ -232,9 +232,12 @@ cards:
         name: Sensor Ultrasonico
       - entity: sensor.nivel_real
         icon: 'mdi:waves'
+    title: Caixa D'água
+    show_header_toggle: false
     type: entities
   - cards:
       - entity: sensor.caixa_dagua_litros
+        name: Litros
         max: 2000
         min: 0
         severity:
@@ -243,6 +246,7 @@ cards:
           yellow: 1000
         type: gauge
       - entity: sensor.caixa_dagua
+        name: Nível
         max: 100
         min: 0
         severity:
@@ -254,13 +258,13 @@ cards:
   - cards:
       - entities:
           - color: '#18FFFF'
-            entity: sensor.consumo_de_agua
+            entity: sensor.vazao_de_agua
             show_state: true
         font_size: 90
         height: 195
         hours_to_show: 6
         line_width: 2
-        name: Consumo de água (6h)
+        name: Vazão (6h)
         points_per_hour: 25
         show:
           extrema: true
@@ -268,4 +272,122 @@ cards:
         type: 'custom:mini-graph-card'
     type: horizontal-stack
 type: vertical-stack
+</pre>
+<pre>
+cards:
+  - entities:
+      - entity: input_text.text_valor_agua
+      - entity: sensor.vazao_de_agua
+        name: Vazão de água por segundo
+      - type: section
+      - entity: sensor.vazao_de_agua_med_min
+    show_header_toggle: false
+    title: Consumo de Água
+    type: entities
+  - cards:
+      - entity: sensor.agua_gasta_dia
+        name: Hoje
+        show_state: true
+        icon: 'mdi:water'
+        styles:
+          card:
+            - height: 78px
+          name:
+            - font-weight: 500
+            - font-size: 14px
+          state:
+            - font-size: 11px
+        type: 'custom:button-card'
+      - entity: sensor.agua_gasta_semana
+        name: Semana
+        show_state: true
+        icon: 'mdi:water'
+        styles:
+          card:
+            - height: 78px
+          name:
+            - font-weight: 500
+            - font-size: 14px
+          state:
+            - font-size: 11px
+        type: 'custom:button-card'
+      - entity: sensor.agua_gasta_mes
+        name: Mês
+        show_state: true
+        icon: 'mdi:water'
+        styles:
+          card:
+            - height: 78px
+          name:
+            - font-weight: 500
+            - font-size: 14px
+          state:
+            - font-size: 11px
+        type: 'custom:button-card'
+      - entity: sensor.agua_gasta_ano
+        name: Ano
+        show_state: true
+        icon: 'mdi:water'
+        styles:
+          card:
+            - height: 78px
+          name:
+            - font-weight: 500
+            - font-size: 14px
+          state:
+            - font-size: 11px
+        type: 'custom:button-card'
+    type: horizontal-stack
+  - cards:
+      - entity: sensor.agua_gasta_valor_dia
+        name: Hoje
+        show_state: true
+        styles:
+          card:
+            - height: 68px
+          name:
+            - font-weight: 500
+            - font-size: 14px
+          state:
+            - font-size: 11px
+        type: 'custom:button-card'
+      - entity: sensor.agua_gasta_valor_semana
+        name: Semana
+        show_state: true
+        styles:
+          card:
+            - height: 68px
+          name:
+            - font-weight: 500
+            - font-size: 14px
+          state:
+            - font-size: 11px
+        type: 'custom:button-card'
+      - entity: sensor.agua_gasta_valor_mes
+        name: Mês
+        show_state: true
+        styles:
+          card:
+            - height: 68px
+          name:
+            - font-weight: 500
+            - font-size: 14px
+          state:
+            - font-size: 11px
+        type: 'custom:button-card'
+      - entity: sensor.agua_gasta_valor_ano
+        name: Ano
+        show_state: true
+        styles:
+          card:
+            - height: 68px
+          name:
+            - font-weight: 500
+            - font-size: 14px
+          state:
+            - font-size: 11px
+        type: 'custom:button-card'
+    type: horizontal-stack
+type: vertical-stack
+
 </pre>
