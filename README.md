@@ -36,7 +36,7 @@ const String HOSTNAME = "SensorAgua";       // Nome do Host e tambem do AP para 
 const char *OTA_PASSWORD = "";              // Senha para conectar no AP (Atualizar o Firmware Over the Air)
 const char *MQTT_SERVER = "192.168.87.5";   // IP ou DNS do Broker MQTT (IP DO HA)
 </pre>
-Ajuste a contagem dos pusolsos para saber a sua vazão corretamente.  <b>vazao = contaPulso / 6.6; </b> para sua realidade, no <a href="https://www.openhacks.com/page/productos/id/3080/title/Flow-Sensor-3-4-Inch-Brass-YF-B5#.XYuXuOZKicm">meu caso o sensor é 3/4</a> onde frequencia:  F=6.6*Q(Q=L/MIN) 
+Ajuste a contagem dos pulsos para saber a sua vazão corretamente.  <b>vazao = contaPulso / 6.6; </b> para sua realidade, no <a href="https://www.openhacks.com/page/productos/id/3080/title/Flow-Sensor-3-4-Inch-Brass-YF-B5#.XYuXuOZKicm">meu caso o sensor é 3/4</a> onde frequencia:  F=6.6*Q(Q=L/MIN) 
 
 
 <b>CONECTANDO WIFI</b><br>
